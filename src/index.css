@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* @font-face {
+  font-family: 'STC';
+  src: url('/fonts/STC.ttf') format('truetype');
+} */
+
+body {
+  font-family: 'STC', sans-serif;
+  background-color: #F2F2F2;
+}
