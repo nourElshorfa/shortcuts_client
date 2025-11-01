@@ -15,7 +15,7 @@ export default function Register() {
   let validationSchema = Yup.object({
     name: Yup.string().min(3 , "Name must be at least 3 characters").max(30 , "Name must be at most 30 characters").required("Name is required") ,
     email: Yup.string().email("Invalid email").required("Email is required") ,
-    password: Yup.string().min(6 , "Password must be at least 8 characters").max(30 , "Password must be at most 30 characters").required("Password is required") ,
+    password: Yup.string().min(6 , "Password must be at least 6 characters").max(30 , "Password must be at most 30 characters").required("Password is required") ,
     confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required")
@@ -92,6 +92,7 @@ export default function Register() {
                 <div className="relative">
                   <input
                   value={formik.values.password}
+                  onBlur={formik.handleBlur}
                    onChange={formik.handleChange}
                   name="password" id="password"
                     type={showPassword ? "text" : "password"}
