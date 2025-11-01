@@ -109,10 +109,10 @@ export default function Register() {
                       <AiOutlineEye className="w-5 h-5" />
                     )}
                   </button>
-                </div>
                 {formik.touched.password && formik.errors.password && (
   <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
 )}
+                </div>
               </div>
 
               {/* Confirm Password */}
