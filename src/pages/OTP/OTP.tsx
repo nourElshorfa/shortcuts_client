@@ -9,7 +9,8 @@ export default function OTP() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2">
         
-      <div className="image h-screen bg-[url('./src/assets/shortcutsPhoto.jpeg')] bg-cover ">
+      <div className="image h-screen bg-[url('/assets/shortcutsPhoto.jpeg')] bg-cover">
+
   
 </div>
 

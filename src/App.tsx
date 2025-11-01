@@ -1,6 +1,6 @@
 
 import './App.css'
-import { createBrowserRouter, createHashRouter, RouterProvider } from 'react-router-dom'
+import {  createHashRouter, RouterProvider } from 'react-router-dom'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 
