@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -7,11 +8,24 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // ✅ التحقق من صحة البريد الإلكتروني
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   // يتحقق من MongoDB عبر API
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+
+    // التحقق من صحة البريد قبل إرسال الطلب
+    if (!validateEmail(email)) {
+      setErrorMessage("الرجاء إدخال بريد إلكتروني صحيح.");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:5000/api/login", {
@@ -23,7 +37,7 @@ export default function Login() {
       const data = await response.json();
 
       if (response.status === 404) {
-        setErrorMessage(data.message); // "لم يتم العثور على الحساب"
+        setErrorMessage(data.message || "لم يتم العثور على الحساب.");
         return;
       }
 
@@ -53,6 +67,7 @@ export default function Login() {
           </h2>
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -62,29 +77,55 @@ export default function Login() {
                 placeholder="Enter Your Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-[#1e2952]"
+                className={`w-full border rounded-md p-2.5 focus:outline-none focus:ring-2 ${
+                  validateEmail(email) || email === ""
+                    ? "border-gray-300 focus:ring-[#1e2952]"
+                    : "border-red-500 focus:ring-red-400"
+                }`}
               />
+              {/* رسالة الخطأ الخاصة بالإيميل */}
+              {!validateEmail(email) && email !== "" && (
+                <p className="text-red-500 text-sm mt-1">
+                  الرجاء إدخال بريد إلكتروني صالح.
+                </p>
+              )}
             </div>
 
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-[#1e2952]"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-[#1e2952]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? (
+                    <AiOutlineEyeInvisible className="w-5 h-5" />
+                  ) : (
+                    <AiOutlineEye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
               <p className="text-right text-sm text-[#1e2952] mt-1 cursor-pointer hover:underline">
                 Forgot Password ?
               </p>
             </div>
 
-            {/* عرض رسالة الخطأ */}
+            {/* عرض رسالة الخطأ العامة */}
             {errorMessage && (
-              <p className="text-center text-red-500 font-medium">{errorMessage}</p>
+              <p className="text-center text-red-500 font-medium">
+                {errorMessage}
+              </p>
             )}
 
             {/* زر Login */}
@@ -118,7 +159,7 @@ export default function Login() {
           <p className="text-center text-gray-500 mt-6">
             If you don’t have an account{" "}
             <Link
-              to="/register"
+              to="/signup"
               className="text-orange-400 font-medium cursor-pointer hover:underline"
             >
               Sign up
