@@ -15,3 +15,13 @@ export default defineConfig({
     }),
   ],
 })
+
+
+
+//  https://nourelshorfa.github.io/shortcuts_client/#/dashboard   // mohammed will make it
+//  https://nourelshorfa.github.io/shortcuts_client/#/signin    //   Mohammed make this he should deploy it on the code on github
+//  https://nourelshorfa.github.io/shortcuts_client/   // Nour Done 
+//  https://nourelshorfa.github.io/shortcuts_client/#/dashboard/itemmanagement   //  Nour done
+//  https://nourelshorfa.github.io/shortcuts_client/#/signup    //  Nour done
+//  https://nourelshorfa.github.io/shortcuts_client/#/otp    //  Nour done
+

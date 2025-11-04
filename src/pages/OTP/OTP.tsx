@@ -38,6 +38,7 @@ export default function OTP() {
 
         {/* OTP Input Fields */}
         <div className="flex gap-4 justify-center mb-8">
+      
           <input
             type="text"
             className="w-14 h-14 border border-gray-300 rounded-lg text-center text-2xl focus:outline-none focus:ring-2 focus:ring-[#F47820]"

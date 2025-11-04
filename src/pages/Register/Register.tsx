@@ -2,16 +2,42 @@ import { useState } from "react";
 import { FaApple } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import axios from "axios";
+
+
 
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading , setLoading] = useState(false)
+  const [error , setError] = useState("")
 
-
+  let navigate = useNavigate();
+  
+  async function submitRegister(values: any) {
+    setLoading(true);
+    try {
+      let res = await axios.post("http://localhost:4000/api/v1/auth/signup", values);
+  
+      if (res.data.message === "success") {
+        navigate("/signin");
+      } else {
+        setError(res.data.message);
+      }
+    } catch (err: any) {
+      // هنا لو السيرفر وقع أو حصل error من axios
+      setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      // finally دايماً بيتنفذ سواء حصل error أو لأ
+      setLoading(false);
+    }
+  }
+  
+  
   let validationSchema = Yup.object({
     name: Yup.string().min(3 , "Name must be at least 3 characters").max(30 , "Name must be at most 30 characters").required("Name is required") ,
     email: Yup.string().email("Invalid email").required("Email is required") ,
@@ -20,34 +46,37 @@ export default function Register() {
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required")
   })
-
-
+  
+  
   let formik = useFormik({
     initialValues : {
       name : "",
       email : "",
       password : "",
       confirmPassword : ""
-    },validationSchema , onSubmit : () => {
-      console.log(formik)
-    }
+    },validationSchema , onSubmit : submitRegister
   })
-
+  
   
 
   return (
     <>
-  
 
+    {loading && <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>}
+
+
+    
       <div className="grid grid-cols-1 sm:grid-cols-2">
         
-      <div className="image h-screen bg-[url('/assets/shortcutsPhoto.jpeg')] bg-cover">
-</div>
-
+      <div className="image h-screen bg-[url('/assets/shortcutsPhoto.jpeg')] bg-cover"></div>
+      
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <h1 className="text-[#18234D] text-center text-3xl mb-10">
               SHORT <span className="text-[#F47820]">CUTS</span>
+              {error && <p className="text-red-500 text-2xl font-bold mt-1">{error}</p>}
             </h1>
             <h1 className="text-2xl mb-8">Sign up</h1>
 
@@ -151,7 +180,7 @@ export default function Register() {
               </div>
 
               {/* Sign Up Button */}
-              <button disabled={!formik.isValid} type="submit" className="w-full bg-[#18234D]  cursor-pointer text-white font-semibold py-3 rounded-lg transition duration-200">
+              <button   disabled={!formik.isValid} type="submit" className="w-full bg-[#18234D]  cursor-pointer text-white font-semibold py-3 rounded-lg transition duration-200">
                 Sign Up
               </button>
          
@@ -182,6 +211,8 @@ export default function Register() {
                 Login
               </Link>
             </div>
+
+
 
 
 
